@@ -19,4 +19,296 @@
 
 \section{Introduction}
 
+Lecture outline:
+\begin{itemize}
+    \item Propositions, connectives, judgments
+    \item Natural Deduction
+    \item Proof terms
+    \item Counting proofs
+    \item Harmony
+\end{itemize}
+
+\section{Propositions, connectives, judgments}
+
+Judgment: $\Gamma \vdash A \istrue$
+
+\section{Inference rules for propositional natural deduction}
+
+(Approximately Gentzen's NJ)
+
+Conjunction:
+\[
+  \infer[\iand I]
+  {\Gamma \vdash A \iand B \istrue}
+  {\Gamma \vdash A \istrue
+  &
+  \Gamma \vdash B \istrue}
+\qquad
+  \infer[\iand E_1]
+  {\Gamma \vdash A \istrue}
+  {\Gamma \vdash A \iand B \istrue}
+\qquad
+  \infer[\iand E_2]
+  {\Gamma \vdash B \istrue}
+  {\Gamma \vdash A \iand B \istrue}
+\]
+
+Disjunction:
+\[
+  \infer[\ior I_1]
+  {\Gamma \vdash A \ior B \istrue}
+  {\Gamma \vdash A \istrue}
+\qquad
+  \infer[\ior I_2]
+  {\Gamma \vdash A \ior B \istrue}
+  {\Gamma \vdash B \istrue}
+\]
+\[
+  \infer[\ior E]
+  {\Gamma \vdash C \istrue}
+  {\Gamma \vdash A \ior B \istrue
+   &
+   \Gamma, A\istrue \vdash C \istrue
+   &
+   \Gamma, B\istrue \vdash C \istrue
+  }
+\]
+
+(The hypothetical judgment and hypothesis rule)
+
+\[
+  \infer[\mathsf{hyp}]
+  {\Gamma \vdash A\istrue}
+  {A\istrue \in \Gamma}
+\]
+
+Implication:
+
+\[
+  \infer[\imp I]
+  {\Gamma \vdash A \imp B \istrue}
+  {\Gamma, A\istrue \vdash B \istrue}
+\qquad
+  \infer[\imp E]
+  {\Gamma \vdash B \istrue}
+  {\Gamma \vdash A \imp B \istrue
+  &
+  \Gamma \vdash A \istrue}
+\]
+
+Truth and Falsehood:
+\[
+  \infer[\top I]
+  {\top \istrue}{}
+  \qquad
+  \mathrm{(no\ \top E)}
+  \qquad
+  \mathrm{(no\ \bot I)}
+  \qquad
+  \infer[\bot E]
+  {\Gamma \vdash C \istrue}
+  {\Gamma \vdash \bot \istrue}
+\]
+
+Negation:
+
+\[
+\neg A := A \imp \bot
+\]
+
+\section{Examples}
+
+Each of the following formulas $\phi$ can be shown 
+$\cdot \vdash \phi \istrue$, i.e. they hold in the empty context, and can
+be regarded as ``theorems'' of the system we have defined.
+
+\begin{itemize}
+  \item $(A \imp B) \iand A \imp B$
+  \item $(A \imp (B \ior C)) \imp (A \iand \neg B) \imp C$
+  \item $(A \ior B) \iand C \imp (A \iand C) \ior (B \iand C)$
+\end{itemize}
+
+
+\section{Soundness and Completeness}
+
+What are some properties we believe this logic should have?
+
+What stops us from defining the rules some other way?
+
+What are the ``guiding principles''? What does it even mean to be a logic,
+or a logical connective?
+
+We won't be able to answer these questions in full yet, but we can at least
+start with one proposed notion of soundness:
+{\em It is not possible to derive $\cdot \vdash \bot \istrue$.}
+
+How would we go about demonstrating such a fact?
+
+\section{Counting Proofs}
+
+Here is a related question: how many proofs are there of 
+
+\[
+  (A \imp B) \imp (A \iand B) \imp B
+\]
+
+?
+
+There are at least two. However, there are in fact infinitely many.
+
+
+
+\section{Proof Terms}
+
+For the remaining discussion, it will be convenient to have a more compact
+notation for proofs. We therefore introduce {\em proof terms}.
+
+We make a small change to three of our rules. First, for $\imp I$ and $\ior
+E$, we add labels to the hypotheses:
+
+\[
+  \infer[\imp I^x]
+  {\Gamma \vdash A \imp B \istrue}
+  {\Gamma, x{:}A\istrue \vdash B \istrue}
+\]
+
+\[ 
+\infer[\ior E^{x,y}]
+  {\Gamma \vdash C \istrue}
+  {\Gamma \vdash A \ior B \istrue
+   &
+   \Gamma, x{:}A\istrue \vdash C \istrue
+   &
+   \Gamma, y{:}B\istrue \vdash C \istrue
+  }
+\]
+
+Then, we rename ``the'' hypothesis rule to its corresponding label:
+
+\[
+  \infer[x]
+  {\Gamma \vdash A \istrue}
+  {x{:}A \istrue \in \Gamma}
+\]
+
+These changes have the effect of allowing us to refer uniquely to
+hypotheses that appear in the context $\Gamma$, and with them we can
+abbreviate derivations of the preceding proofs.
+
+In one more step, we apply the following syntactic translation:
+
+\begin{tabular}{cc}
+  $\imp I^x(M)$  & $\lambda{x}.\;M$ (function abstraction) \\
+  $\imp E(M,N)$  & $M\; N$ (function application) \\
+  $\iand I(M,N)$ & $(M, N)$ (pairs) \\
+  $\iand E_i(M)$ & $\pi_i M$ (projection) \\
+  $\ior I_i(M)$  & $\mathsf{in}_i\,M$ (injection)\\
+  $\ior E^{x,y}(M,N,P)$ & $\excase{M, x.\,N, y.\,P}$ (case analysis)\\
+  $\top I$ & $()$ (unit)\\
+  $\bot E(M)$ & $\mathsf{abort}, M$ (error)
+\end{tabular}
+
+This gives us a somewhat familiar-looking syntax akin to functional
+programming---more specifically, the simply-typed $\lambda$ calculus
+(STLC).
+
+
+\section{Harmony: Local Soundness and Completeness}
+
+\subsection{(Internal) Soundness and Completeness}
+
+% (TODO additional discussion?)
+
+{\bf Soundness:} the logic is not vacuous. That is,
+there are some propositions that are not true.
+
+In particular, we can't write a closed proof of $\ifalse$.
+
+{\bf Completeness:} the hypothetical judgment captures deduction in the logic.
+That is, even if we only allow the use of hypotheses
+at atomic propositions, then we can still construct
+a proof of each proposition by assuming it.
+
+\subsection{Local Soundness as Proof Reduction}
+
+Soundness essentially states that 
+a logic's proofs do not admit {\em more information}
+than what is used to construct them.
+The proof amounts to showing that {\em circuitous}
+steps in proofs can be eliminated. 
+Soundness is a {\em global} property of the logic:
+any rule could interact in some unexpected ways with
+all of the other rules, so we can't just check them in isolation.
+
+However, there is a weaker notion of soundness that we can check for just a single
+propositional connective: if a proof has circuitousness by virtue of {\em immediately}
+introducing and then eliminating a connective, we can eliminate
+such a redundancy.
+%
+We demonstrate this by identifying ``circuitous'' proofs and showing
+how they can be rewritten to avoid the unnecessary steps.
+
+Conjunction:
+
+\[
+\infer[\iand{E}_1]
+{A \istrue}
+{
+    \infer[\iand{I}]
+    {A \iand B \istrue}
+    {
+        \deduce{A\istrue}{\DD_1}
+        &
+        \deduce{B\istrue}{\DD_2}
+    }
+}
+\qquad
+\Longrightarrow
+\qquad
+\deduce{A\istrue}{\DD_1}
+\]
+
+\[
+\infer[\iand{E}_2]
+{B \istrue}
+{
+    \infer[\iand{I}]
+    {A \iand B \istrue}
+    {
+        \deduce{A\istrue}{\DD_1}
+        &
+        \deduce{B\istrue}{\DD_2}
+    }
+}
+\qquad
+\Longrightarrow
+\qquad
+\deduce{B\istrue}{\DD_2}
+\]
+
+Implication:
+
+\[
+\infer[\imp{E}]
+{B \istrue}
+{
+\infer[\imp{I}^u]
+{A \imp B \istrue}
+{   \deduce{B\istrue}
+    {\deduce{\vdots}{\infer[u]{A\istrue}{}}}
+}
+&
+\deduce{A}{\DD}
+}
+\qquad
+\Longrightarrow
+\qquad
+\deduce{B\istrue}
+{\deduce{\DD}{\infer[u]{A\istrue}{}}}
+\]
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
 \end{document}
