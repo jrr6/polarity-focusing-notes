@@ -1,0 +1,94 @@
+\newcommand{\exif}[1]{\mathsf{if}\;{#1}}
+\newcommand{\exthen}[1]{\ \mathsf{then}\;{#1}}
+\newcommand{\exelse}[1]{\ \mathsf{else}\;{#1}}
+\newcommand{\exite}[1]{\mathsf{ite}(#1)}
+\newcommand{\explus}[1]{\mathsf{plus}(#1)}
+\newcommand{\extrue}{\mathsf{true}}
+\newcommand{\exfalse}{\mathsf{false}}
+\newcommand{\exnum}[1]{\mathsf{num}(#1)}
+\newcommand{\exbool}[1]{\mathsf{bool}(#1)}
+\newcommand{\exlet}[1]{\mathsf{let}(#1)}
+\newcommand{\exfun}[1]{\ensuremath{\lambda{#1}}}
+% \newcommand{\exapp}[2]{\mathsf{app}({#1}, {#2})}
+\newcommand{\exapp}[2]{{#1}{(#2)}}
+\newcommand{\exunit}{()}
+\newcommand{\expair}[1]{(#1)}
+\newcommand{\exlpair}[1]{\langle #1 \rangle}
+\newcommand{\exinl}[1]{\mathsf{in}_1\,{#1}}
+\newcommand{\exinr}[1]{\mathsf{in}_2\,{#1}}
+%\newcommand{\expil}[1]{\ensuremath{\pi_1}\,{#1}}
+%\newcommand{\expir}[1]{\ensuremath{\pi_2}\,{#1}}
+% "dot" syntax:
+\newcommand{\expil}[1]{{#1}.1}
+\newcommand{\expir}[1]{{#1}.2}
+\newcommand{\excase}[1]{\mathsf{case}(#1)}
+\newcommand{\exsplit}[1]{\mathsf{split}(#1)}
+\newcommand{\exlam}[1]{\exfun{#1}}
+\newcommand{\exzero}{\mathsf{zero}}
+\newcommand{\exsucc}[1]{\mathsf{succ}(#1)}
+\newcommand{\exrec}[1]{\mathsf{rec}(#1)}
+\newcommand{\exdiverge}{\bot}
+\newcommand{\exfix}[2]{\mathsf{fix}_{#1}(#2)}
+\newcommand{\exifz}[1]{\mathsf{ifz}(#1)}
+\newcommand{\extyab}[1]{\Lambda{#1}}
+\newcommand{\extyapp}[2]{#1[#2]}
+\newcommand{\exfail}{\mathsf{fail}}
+\newcommand{\extry}[1]{\mathsf{trycatch}(#1)}
+\newcommand{\exalloc}[1]{\mathsf{alloc}(#1)}
+\newcommand{\exassign}[2]{{#1} := {#2}}
+\newcommand{\exderef}[1]{?{#1}}
+
+% types
+\newcommand{\tybool}{\mathsf{Bool}}
+\newcommand{\tynum}{\mathsf{Num}}
+\newcommand{\tynat}{\mathsf{nat}}
+\newcommand{\tyzero}{\mathbf{0}}
+% \newcommand{\tyone}{\mathbb{1}}
+\newcommand{\tyone}{\mathbf{1}}
+% \newcommand{\tytwo}{\mathbb{2}}
+\newcommand{\tytwo}{\mathbf{2}}
+\newcommand{\typrod}{\times}
+\newcommand{\tyfun}{\to}
+\newcommand{\tysum}{+}
+\newcommand{\tywith}{\;\&\;}
+\newcommand{\typarfun}{\rightharpoonup}
+\newcommand{\tyall}{\forall}
+\newcommand{\tyref}[1]{\mathsf{ref}(#1)}
+\newcommand{\tylolli}{\multimap}
+\newcommand{\tyoplus}{\oplus}
+\newcommand{\tytens}{\otimes}
+\newcommand{\tytop}{\top}
+\newcommand{\tybang}{\,!}
+
+\newcommand{\pzero}{\mathsf{zero}}
+\newcommand{\psucc}{\mathsf{succ}}
+
+\newcommand{\evals}{\Downarrow}
+\newcommand{\isval}{\ \mathsf{value}}
+\newcommand{\istype}{\ \mathsf{type}}
+\newcommand{\isctx}{\ \mathsf{ctx}}
+
+\newcommand{\steps}{\mapsto}
+\newcommand{\stepstar}{\mapsto^{*}}
+\newcommand{\reduces}{\longrightarrow}
+
+% Stacks
+\newcommand{\seval}{\triangleright}
+\newcommand{\sret}{\triangleleft}
+\newcommand{\hole}{\square}
+%\DeclareUnicodeCharacter{1F635}{\failstate}
+%\DeclareRobustCommand\failstate{%
+%  \unskip\nobreak\thinspace\textemdash\allowbreak\thinspace\ignorespaces}
+\newcommand{\failstate}{\blacktriangleleft}
+
+%% Program equivalence
+\newcommand{\iso}{\simeq}
+% \newcommand{\eequiv}{\cong}
+\newcommand{\eequiv}{\approx}
+\newcommand{\vequiv}{\sim}
+
+% Semantics
+\newcommand{\mathnat}{\mathbf{N}}
+\newcommand{\encode}[1]{\ulcorner #1\urcorner}
+\newcommand{\vsem}[1]{\llbracket #1 \rrbracket}
+\newcommand{\rel}[1]{\mathbf{Rel}(#1)}

@@ -1,0 +1,36 @@
+\usepackage{aliascnt}
+
+\newtheorem{theorem}{Theorem}
+
+\newaliascnt{conjecture}{theorem}
+\newtheorem{conjecture}[conjecture]{Conjecture}
+\aliascntresetthe{conjecture}
+\providecommand*{\conjectureautorefname}{Conjecture}
+% \newtheorem{conjecture}[theorem]{Conjecture}
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\providecommand*{\lemmaautorefname}{Lemma}
+% \newtheorem{lemma}[theorem]{Lemma}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\providecommand*{\corollaryautorefname}{Corollary}
+% \newtheorem{corollary}[theorem]{Corollary}
+
+\newtheorem{exercise}{Exercise}
+\providecommand*{\exerciseautorefname}{Exercise}
+
+\newtheorem{discuss}{Discussion Question}
+\providecommand*{\exerciseautorefname}{Discussion Question}
+
+\newtheorem{definition}[theorem]{Definition}
+
+% \newenvironment{proof}{\trivlist \item[\hskip \labelsep{\bf 
+% Proof:}]}{\hfill$\Box$ \endtrivlist}
+\newenvironment{sketch}{\trivlist \item[\hskip \labelsep{\bf 
+Proof sketch:}]}{\hfill$\Box$ \endtrivlist}
+\newenvironment{attempt}{\trivlist \item[\hskip \labelsep{\bf 
+Proof attempt:}]}{\hfill$\Diamond$ \endtrivlist}
