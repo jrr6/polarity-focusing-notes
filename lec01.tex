@@ -128,6 +128,46 @@ be regarded as ``theorems'' of the system we have defined.
   \item $(A \ior B) \iand C \imp (A \iand C) \ior (B \iand C)$
 \end{itemize}
 
+\begin{exercise}\label{ex:derivs}
+  Typeset derivations for these proofs.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:hypnotation}
+  In class, there was a discussion of the meaning of
+  $\vdash$, the notation for the hypothetical judgment.
+  Recall that we give the hypothetical judgment
+  $B_1 \istrue, \ldots, B_n \istrue \vdash A \istrue$
+  its meaning via ``scoped axioms'' of the form
+  \[
+    \infer[]{B_i \istrue}{}
+  \]
+  in the ambient metalogic, which are permitted to be
+  used when proving $A \istrue$.
+
+  In Gentzen's original notation, he elided the explicit mention of
+  $\Gamma$, instead writing
+  \[
+  \infer[\imp I]
+  {A \imp B \istrue}
+  {\deduce{B \istrue}{[A \istrue]}}
+  \]
+
+  When we write $\Gamma$ explicitly, it is also very tempting
+  to treat it as ``mere'' syntax that can be manipulated by
+  inference rules (e.g. Weakening, Contraction, and Exchange; or an
+  equational theory on contexts).
+
+  These presentational choices impact both metatheory and
+  pedagogy. For this exercise, decide for yourself on an approach that you
+  might try using to present natural deduction to a audience unfamiliar
+  with it: would you include $\Gamma$ explicitly or use Gentzen's (or a
+  similar) notation? How would you write the hypothetical rule?
+  Justify your choices.
+  (If you like the presentation from lecture/these notes, that's fine, 
+  but you still have to argue for it.)
+  
+\end{exercise}
 
 \section{Soundness and Completeness}
 
@@ -149,13 +189,22 @@ How would we go about demonstrating such a fact?
 Here is a related question: how many proofs are there of 
 
 \[
-  (A \imp B) \imp (A \iand B) \imp B
+  \cdot \vdash (A \imp B) \imp (A \iand B) \imp B \istrue
 \]
 
 ?
 
 There are at least two. However, there are in fact infinitely many.
 
+\begin{exercise}
+  Write two distinct proofs of 
+  the above judgment.
+\end{exercise}
+
+\begin{exercise}
+  Informally describe a procedure for generating infinitely many
+  such proofs.
+\end{exercise}
 
 
 \section{Proof Terms}
@@ -212,101 +261,115 @@ This gives us a somewhat familiar-looking syntax akin to functional
 programming---more specifically, the simply-typed $\lambda$ calculus
 (STLC).
 
+\begin{exercise}
+  Rewrite the derivations from Exercise \ref{ex:derivs} in proof term notation.
+\end{exercise}
 
-\section{Harmony: Local Soundness and Completeness}
+\begin{exercise}
+  Revisit your decision from Exercise \ref{ex:hypnotation}.
+  How do your choices affect the information recorded by the
+  proof term and its relationship to the derivation?
+  If necessary, design a modification to the proof term
+  syntax to account for your decision.
+\end{exercise}
 
-\subsection{(Internal) Soundness and Completeness}
 
-% (TODO additional discussion?)
-
-{\bf Soundness:} the logic is not vacuous. That is,
-there are some propositions that are not true.
-
-In particular, we can't write a closed proof of $\ifalse$.
-
-{\bf Completeness:} the hypothetical judgment captures deduction in the logic.
-That is, even if we only allow the use of hypotheses
-at atomic propositions, then we can still construct
-a proof of each proposition by assuming it.
-
-\subsection{Local Soundness as Proof Reduction}
-
-Soundness essentially states that 
-a logic's proofs do not admit {\em more information}
-than what is used to construct them.
-The proof amounts to showing that {\em circuitous}
-steps in proofs can be eliminated. 
-Soundness is a {\em global} property of the logic:
-any rule could interact in some unexpected ways with
-all of the other rules, so we can't just check them in isolation.
-
-However, there is a weaker notion of soundness that we can check for just a single
-propositional connective: if a proof has circuitousness by virtue of {\em immediately}
-introducing and then eliminating a connective, we can eliminate
-such a redundancy.
-%
-We demonstrate this by identifying ``circuitous'' proofs and showing
-how they can be rewritten to avoid the unnecessary steps.
-
-Conjunction:
-
-\[
-\infer[\iand{E}_1]
-{A \istrue}
-{
-    \infer[\iand{I}]
-    {A \iand B \istrue}
-    {
-        \deduce{A\istrue}{\DD_1}
-        &
-        \deduce{B\istrue}{\DD_2}
-    }
-}
-\qquad
-\Longrightarrow
-\qquad
-\deduce{A\istrue}{\DD_1}
-\]
-
-\[
-\infer[\iand{E}_2]
-{B \istrue}
-{
-    \infer[\iand{I}]
-    {A \iand B \istrue}
-    {
-        \deduce{A\istrue}{\DD_1}
-        &
-        \deduce{B\istrue}{\DD_2}
-    }
-}
-\qquad
-\Longrightarrow
-\qquad
-\deduce{B\istrue}{\DD_2}
-\]
-
-Implication:
-
-\[
-\infer[\imp{E}]
-{B \istrue}
-{
-\infer[\imp{I}^u]
-{A \imp B \istrue}
-{   \deduce{B\istrue}
-    {\deduce{\vdots}{\infer[u]{A\istrue}{}}}
-}
-&
-\deduce{A}{\DD}
-}
-\qquad
-\Longrightarrow
-\qquad
-\deduce{B\istrue}
-{\deduce{\DD}{\infer[u]{A\istrue}{}}}
-\]
-
+% \section{Harmony: Local Soundness and Completeness}
+% 
+% \subsection{(Internal) Soundness and Completeness}
+% 
+% % (TODO additional discussion?)
+% 
+% {\bf Soundness:} the logic is not vacuous. That is,
+% there are some propositions that are not true.
+% 
+% In particular, we can't write a closed proof of $\ifalse$.
+% 
+% {\bf Completeness:} the hypothetical judgment captures deduction in the logic.
+% That is, even if we only allow the use of hypotheses
+% at atomic propositions, then we can still construct
+% a proof of each proposition by assuming it.
+% 
+% \subsection{Local Soundness as Proof Reduction}
+% 
+% Soundness essentially states that 
+% a logic's proofs do not admit {\em more information}
+% than what is used to construct them.
+% The proof amounts to showing that {\em circuitous}
+% steps in proofs can be eliminated. 
+% Soundness is a {\em global} property of the logic:
+% any rule could interact in some unexpected ways with
+% all of the other rules, so we can't just check them in isolation.
+% 
+% However, there is a weaker notion of soundness that we can check for just a single
+% propositional connective: if a proof has circuitousness by virtue of {\em immediately}
+% introducing and then eliminating a connective, we can eliminate
+% such a redundancy.
+% %
+% We demonstrate this by identifying ``circuitous'' proofs and showing
+% how they can be rewritten to avoid the unnecessary steps.
+% 
+% Conjunction:
+% 
+% \[
+% \infer[\iand{E}_1]
+% {A \istrue}
+% {
+%     \infer[\iand{I}]
+%     {A \iand B \istrue}
+%     {
+%         \deduce{A\istrue}{\DD_1}
+%         &
+%         \deduce{B\istrue}{\DD_2}
+%     }
+% }
+% \qquad
+% \Longrightarrow
+% \qquad
+% \deduce{A\istrue}{\DD_1}
+% \]
+% 
+% \[
+% \infer[\iand{E}_2]
+% {B \istrue}
+% {
+%     \infer[\iand{I}]
+%     {A \iand B \istrue}
+%     {
+%         \deduce{A\istrue}{\DD_1}
+%         &
+%         \deduce{B\istrue}{\DD_2}
+%     }
+% }
+% \qquad
+% \Longrightarrow
+% \qquad
+% \deduce{B\istrue}{\DD_2}
+% \]
+% 
+% Implication:
+% 
+% \[
+% \infer[\imp{E}]
+% {B \istrue}
+% {
+% \infer[\imp{I}^u]
+% {A \imp B \istrue}
+% {   \deduce{B\istrue}
+%     {\deduce{\vdots}{\infer[u]{A\istrue}{}}}
+% }
+% &
+% \deduce{A}{\DD}
+% }
+% \qquad
+% \Longrightarrow
+% \qquad
+% \deduce{B\istrue}
+% {\deduce{\DD}{\infer[u]{A\istrue}{}}}
+% \]
+% 
+% We will continue this discussion in the next lecture.
+% 
 
 \bibliographystyle{plainnat}
 \bibliography{main}
