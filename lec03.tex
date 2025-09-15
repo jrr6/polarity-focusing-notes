@@ -268,6 +268,7 @@ identical to $\proves$.
 
 \section{Proof of Cut Admissibility}
 
+TODO add discussion of induction order.
 
 \begin{theorem}[Cut]
   If $\Gamma \proves A$ and $\Gamma, A \proves C$ then $\Gamma \proves C$.
@@ -278,7 +279,28 @@ identical to $\proves$.
   by the unordered pair of $\DD$ and $\EE$, where $\DD$ is the derivation
   of the first assumption and $\EE$ is the derivation of the second.
 
-  TODO add cases.
+  The cases for the proof fall into three categories:
+  \begin{itemize}
+    \item The so-called {\em principal cuts}, in which the cut formula 
+      $A$ is the {\em principal formula} for the outermost rule of both 
+      $\DD$ and $\EE$. 
+      The principal formula of a rule is the one it matches against,
+      e.g. $A \iand B$ in $\iand L$ and $\iand R$.
+    \item The cut formula is not the principal formula of the outermost
+      rule comprising $\DD$.
+    \item The cut formula is not the principal formula of the outermost
+      rule comprising $\EE$.
+  \end{itemize}
+
+  Order to go through cases:
+  \begin{itemize}
+    \item Identity rule, three ways.
+    \item Principal cut for $\iand$.
+    \item Principal cut for $\imp$.
+    \item Side formula cut (1) for $\iand L$.
+    \item Side formula cut (2) for $\imp R$.
+    \item Side formula cut (2) for $\imp L$.
+  \end{itemize}
 \end{proof}
 
 \section{Adequacy of Sequent Calculus for Natural Deduction}
@@ -289,6 +311,9 @@ Statement: if $\Gamma \vdash A\istrue$ then $\ulcorner \Gamma \urcorner
 Proof: by induction on the structure of the derivation of $\Gamma \vdash A
 \istrue$.
 
+\section{Proof of Identity}
+
+TODO exercise?
 
 
 \bibliographystyle{plainnat}

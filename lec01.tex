@@ -254,7 +254,8 @@ In one more step, we apply the following syntactic translation:
   $\ior I_i(M)$  & $\mathsf{in}_i\,M$ (injection)\\
   $\ior E^{x,y}(M,N,P)$ & $\excase{M, x.\,N, y.\,P}$ (case analysis)\\
   $\top I$ & $()$ (unit)\\
-  $\bot E(M)$ & $\mathsf{abort}, M$ (error)
+  $\bot E(M)$ & $\mathsf{abort}, M$ (error)\\
+  $\mathsf{hyp}/x$ & $x$ (variables)
 \end{tabular}
 
 This gives us a somewhat familiar-looking syntax akin to functional
