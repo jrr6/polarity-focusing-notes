@@ -14,6 +14,11 @@
 \providecommand*{\lemmaautorefname}{Lemma}
 % \newtheorem{lemma}[theorem]{Lemma}
 
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\providecommand*{\propositionautorefname}{Proposition}
+
 \newaliascnt{corollary}{theorem}
 \newtheorem{corollary}[corollary]{Corollary}
 \aliascntresetthe{corollary}

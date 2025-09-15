@@ -1,0 +1,297 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{proof-dashed,amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\input{program-macros}
+\input{logic-macros}
+\input{metatheory}
+
+\title{Lecture 3: Sequent Calculus}
+\author{Chris Martens}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Lecture outline:
+\begin{itemize}
+    \item Sequent calculus: left and right rules
+    \item Statement of Cut and Identity properties
+    \item Proof: Admissibility of Cut 
+    \item Proof: ND into sequent calculus (via Cut)
+    \item Identity
+\end{itemize}
+
+This paper sources extensively from (TODO cite) Gentzen'35
+and Frank Pfenning's 2017 lecture notes on Sequent Calculus and
+Cut Elimination.
+
+\section{Sequent calculus: left and right rules for connectives}
+
+The calculus presented herein corresponds approximately to Gentzen's LJ.
+
+We will write the judgment as $\Gamma \proves A$,
+where $\Gamma$ is an unordered list of propositions
+$A_1,\ldots,A_n$ and $A$ is a proposition.
+To be more precise, we can think of the assumptions
+in $\Gamma$ as judgments of the form $A\hyp$
+and the conclusion as a judgment of the form
+$A\conc$. However, this treatment represents a
+divergence from Gentzen, who treated the sequent
+$\Gamma \proves A$ as a syntactic structure.
+
+For each connective, we will define {\em left rules}
+that define a proposition's meaning on the left side
+of the sequent and {\em right rules} that determine
+its meaning on the right.
+
+Conjunction:
+\[
+  \infer[\iand R]
+  {\Gamma \proves A \iand B}
+  {\Gamma \proves A
+  &
+  \Gamma \proves A}
+\qquad
+  \infer[\iand L_1]
+  {\Gamma, A \iand B \proves C}
+  {\Gamma, A \iand B, A \proves C}
+\qquad
+  \infer[\iand L_2]
+  {\Gamma, A \iand B \proves C}
+  {\Gamma, A \iand B, B \proves C}
+\]
+
+Disjunction:
+\[
+  \infer[\ior R_1]
+  {\Gamma \proves A \ior B}
+  {\Gamma \proves A}
+\qquad
+  \infer[\ior R_2]
+  {\Gamma \proves A \ior B}
+  {\Gamma \proves B}
+\]
+\[
+  \infer[\ior L]
+  {\Gamma, A \ior B \proves C}
+  {\Gamma, A \ior B, A \proves C
+   &
+   \Gamma, A \ior B, B \proves C
+  }
+\]
+
+Implication:
+\[
+  \infer[\imp R]
+  {\Gamma \proves A \imp B}
+  {\Gamma, A \proves B}
+\qquad
+  \infer[\imp L]
+  {\Gamma, A \imp B \proves C}
+  {\Gamma, A \imp B \proves A
+  &
+  \Gamma, A \imp B, B \proves C}
+\]
+
+
+Truth and Falsehood:
+\[
+  \infer[\top R]
+  {\Gamma \proves \top}{}
+  \qquad
+  \mathrm{(no\ \top L)}
+  \qquad
+  \mathrm{(no\ \bot R)}
+  \qquad
+  \infer[\bot L]
+  {\Gamma, \bot \proves C} {}
+\]
+
+Negation $\neg A$ is, as before,
+defined as $A \imp \bot$.
+
+Finally, we need something analogous to the
+hypothesis rule from natural deduction
+in order to make use of things on the left
+of the sequent on the right. We call this the
+``identity rule'' and sometimes refer to its
+conclusion as an ``initial sequent.''
+
+\[
+  \infer[\mathsf{id}]
+  {\Gamma, A \proves A}
+  {}
+\]
+
+
+\subsection{Proof Examples}
+
+We will go through some subset of the following as examples
+in class.
+\begin{itemize}
+  \item $A \ior B \imp A \ior B$
+  \item $(A \imp B) \iand A \imp B$
+  \item $(A \imp (B \ior C)) \imp (A \iand \neg B) \imp C$
+  \item $(A \ior B) \iand C \imp (A \iand C) \ior (B \iand C)$
+\end{itemize}
+
+\begin{exercise}
+  Typeset proofs of $\cdot \proves A$
+  for each formula $A$ above.
+\end{exercise}
+
+\section{Observations}
+
+\subsection{Structural Rules}
+
+Some presentations of sequent calculus include
+the so-called ``structural rules'', weakening (or thinning) 
+and contraction.
+
+\[
+  \infer[\mathsf{wk}]
+  {\Gamma, A \proves C}
+  {\Gamma \proves C}
+  \qquad
+  \infer[\mathsf{contr}]
+  {\Gamma, A \proves C}
+  {\Gamma, A, A \proves C}
+\]
+
+However, it will be to our advantage to prove these rules {\em admissible}
+instead of explicitly including them.
+
+Proving a rule admissible means: assume there is some derivation for
+premises, and show that there is a derivation of the conclusion.
+
+We can come up with a theorem statement corresponding to the rule to show
+it admissible.
+
+\begin{theorem}[Weakening]
+  If $\Gamma \proves C$, then $\Gamma, A \proves C$ with
+  a structurally identical deduction.
+\end{theorem}
+
+\begin{proof}
+  Add $A$ to $\Gamma$ in every sequent appearing in 
+  the given derivation of $\Gamma \proves C$. The rules still apply in each
+  case since they are parametric in $\Gamma$. 
+  The result is a structurally identical derivation
+  of $\Gamma, A \proves C$.
+\end{proof}
+
+(Note that we could make the above more formal by induction over the
+structure of the derivation, but it would be a very boring proof.)
+
+\begin{exercise} 
+  State and prove a corresponding theorem for Contraction.
+  If you are unable to make the proof rigorous,
+  discuss why and what might be done to address it.
+\end{exercise}
+
+\subsection{Non-provability}
+
+In sequent calculus, it is easy to demonstrate
+that certain sequents are {\em not} provable.
+We will work through some examples:
+
+\begin{itemize}
+  \item Soundness: no proof of $\cdot \proves \bot$
+  \item Disjunction property: if $\cdot \proves A \ior B$,
+    then $\cdot \proves A$ or $\cdot \proves B$.
+  \item Non-provability of excluded middle (LEM): there is no proof
+    of $\cdot \proves A \ior \lnot A$ for arbitrary $A$.
+  \item Non-provability of double-negation elimination (DNE):
+    there is no proof of $\cdot \proves \lnot \lnot A \implies A$.
+\end{itemize}
+
+\begin{exercise}
+  Typeset proofs of the above non-provability arguments.
+\end{exercise}
+
+\begin{exercise}
+  Find another classically valid, but not intuitionistically valid,
+  proposition $A$ and demonstrate that $\cdot \proves A$ is not provable
+  in general.
+\end{exercise}
+
+\begin{exercise}
+  Why do we keep qualifying each of these statements with ``in general''
+  or ``for arbitrary $A$''? Explain how the situation changes
+  when we are allowed to talk about specific propositions $A$.
+\end{exercise}
+
+
+\section{Sequent Calculus Metatheory: Cut and Identity}
+
+There are two theorems corresponding to internal soundness and
+completeness for sequent calculus.
+
+The soundness theorem is {\em cut}:
+
+\begin{proposition}[Cut]
+  If $\Gamma \proves A$ and $\Gamma, A \proves C$ then $\Gamma \proves C$.
+\end{proposition}
+
+\newcommand{\provesid}{\proves^{\mathsf{id}}}
+
+The completeness theorem requires that we 
+restrict the identity rule to atomic propositions.
+We will call this restricted form of provability
+$\provesid$.
+
+\[
+  \infer[\mathsf{id}]
+  {\Gamma, P \provesid P}
+  {}
+\]
+
+$P$ here is atomic. All other rules in $\provesid$ are
+identical to $\proves$.
+
+\begin{proposition}[Identity]
+  For all propositions $A$,
+  $A \provesid A$.
+\end{proposition}
+
+\begin{exercise}
+  Discuss why these metatheorem statements correspond to soundness and
+  completeness for sequent calculus.
+\end{exercise}
+
+\section{Proof of Cut Admissibility}
+
+
+\begin{theorem}[Cut]
+  If $\Gamma \proves A$ and $\Gamma, A \proves C$ then $\Gamma \proves C$.
+\end{theorem}
+
+\begin{proof}
+  By induction on the lexicographic ordering of $A$ followed
+  by the unordered pair of $\DD$ and $\EE$, where $\DD$ is the derivation
+  of the first assumption and $\EE$ is the derivation of the second.
+
+  TODO add cases.
+\end{proof}
+
+\section{Adequacy of Sequent Calculus for Natural Deduction}
+
+Statement: if $\Gamma \vdash A\istrue$ then $\ulcorner \Gamma \urcorner
+\proves A$.
+
+Proof: by induction on the structure of the derivation of $\Gamma \vdash A
+\istrue$.
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\end{document}

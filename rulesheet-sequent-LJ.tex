@@ -1,0 +1,110 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{proof-dashed,amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\input{program-macros}
+\input{logic-macros}
+\input{metatheory}
+
+\title{Rule Sheet: Intuitionistic Sequent Calculus}
+\author{Chris Martens}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Inference Rules}
+
+Judgment $\Gamma \proves A$,
+where $\Gamma$ is an unordered list
+of propositions $A$.
+Proposition forms $A,B,C$ include
+conjunction $A \iand B$,
+disjunction $A \ior B$,
+implication $A \imp B$,
+truth $\top$, 
+falsehood $\bot$,
+and atomic propositions $P$.
+
+Conjunction:
+\[
+  \infer[\iand R]
+  {\Gamma \proves A \iand B}
+  {\Gamma \proves A
+  &
+  \Gamma \proves A}
+\qquad
+  \infer[\iand L_1]
+  {\Gamma, A \iand B \proves C}
+  {\Gamma, A \iand B, A \proves C}
+\qquad
+  \infer[\iand L_2]
+  {\Gamma, A \iand B \proves C}
+  {\Gamma, A \iand B, B \proves C}
+\]
+
+Disjunction:
+\[
+  \infer[\ior R_1]
+  {\Gamma \proves A \ior B}
+  {\Gamma \proves A}
+\qquad
+  \infer[\ior R_2]
+  {\Gamma \proves A \ior B}
+  {\Gamma \proves B}
+\]
+\[
+  \infer[\ior L]
+  {\Gamma, A \ior B \proves C}
+  {\Gamma, A \ior B, A \proves C
+   &
+   \Gamma, A \ior B, B \proves C
+  }
+\]
+
+Implication:
+\[
+  \infer[\imp R]
+  {\Gamma \proves A \imp B}
+  {\Gamma, A \proves B}
+\qquad
+  \infer[\imp L]
+  {\Gamma, A \imp B \proves C}
+  {\Gamma, A \imp B \proves A
+  &
+  \Gamma, A \imp B, B \proves C}
+\]
+
+
+Truth and Falsehood:
+\[
+  \infer[\top R]
+  {\Gamma \proves \top}{}
+  \qquad
+  \mathrm{(no\ \top L)}
+  \qquad
+  \mathrm{(no\ \bot R)}
+  \qquad
+  \infer[\bot L]
+  {\Gamma, \bot \proves C} {}
+\]
+
+Negation $\neg A$ is, as before,
+defined as $A \imp \bot$.
+
+Identity rule:
+\[
+  \infer[\mathsf{id}]
+  {\Gamma, A \proves A}
+  {}
+\]
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\end{document}
