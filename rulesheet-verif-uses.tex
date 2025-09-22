@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{proof-dashed,amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\input{program-macros}
+\input{logic-macros}
+\input{metatheory}
+
+\title{Rule Sheet: Verifications and Uses}
+\author{Chris Martens}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Verifications and Uses}
+
+Judgments: $A \verif$ ($A$ has a verification); $A \use$ ($A$ may be used)
+
+\[
+  \infer[\iand I]
+  {A \iand B \verif}
+  {A \verif & B \verif}
+  \qquad
+  \infer[\iand E_1]
+  {A \use}
+  {A \iand B \use}
+  \qquad
+  \infer[\iand E_2]
+  {B \use}
+  {A \iand B \use}
+  \qquad
+  \infer[\top I]
+  {\top \verif}{}
+\]
+
+\[
+  \infer[\ior I_1]
+  {A \ior B \verif}
+  {A \verif}
+  \qquad
+  \infer[\ior I_2]
+  {A \ior B \verif}
+  {B \verif}
+  \qquad
+  \infer[\ior E]
+  {C \verif}
+  {A \ior B \use
+   &
+   A \use \vdash C \verif
+   &
+   B \use \vdash C \verif
+  }
+\]
+
+\[
+  \infer[\bot E]
+  {C \verif}
+  {\bot \use}
+  \qquad
+  \infer[\imp I]
+  {A \imp B \verif}
+  {A \use \vdash B \verif}
+  \qquad
+  \infer[\imp E]
+  {B \use}
+  {A \imp B \use
+   &
+   B \verif}
+  \qquad
+  \infer[\verif\use]
+  {P \verif}
+  {P \use}
+\]
+
+
+\begin{theorem}[Uniform Substitution]
+  If $\Gamma, x:A \use \vdash J$
+  and $\Gamma \vdash A \use$ then
+  $\Gamma \vdash J$ (where $J$ may be $C\verif$ or $C\use$).
+\end{theorem}
+\begin{proof}
+  Everywhere $x$ us used to justify $A \use$ in the proof of $J$,
+  use the proof of $\Gamma \vdash A \use$ instead.
+\end{proof}
+
+
+\subsection{Proof Terms}
+
+
+\[
+  \infer[\iand I]
+  {(M_1, M_2) : A \iand B \verif}
+  {M_1 : A \verif & M_2 : B \verif}
+  \qquad
+  \infer[\iand E_1]
+  {\pi_1 R : A \use}
+  {R : A \iand B \use}
+  \qquad
+  \infer[\iand E_2]
+  {\pi_2 R : B \use}
+  {R : A \iand B \use}
+\]
+
+
+\[
+  \infer[\top I]
+  {() : \top \verif}{}
+  \qquad
+  \infer[\ior I_1]
+  {\exinl M : A \ior B \verif}
+  {M : A \verif}
+  \qquad
+  \infer[\ior I_2]
+  {\exinr M : A \ior B \verif}
+  {M : B \verif}
+\]
+\[
+  \infer[\ior E]
+  {\excase{R, x.M, y.N} : C \verif}
+  {R : A \ior B \use
+   &
+   x:A \use \vdash M:C \verif
+   &
+   y:B \use \vdash N:C \verif
+  }
+  \qquad
+  \infer[\bot E]
+  {\excase{R} : C \verif}
+  {R : \bot \use}
+\]
+\[
+  \infer[\imp I]
+  {\lambda{x}.M : A \imp B \verif}
+  {x:A \use \vdash M:B \verif}
+  \qquad
+  \infer[\imp E]
+  {R\;M : B \use}
+  {R : A \imp B \use
+   &
+   M : B \verif}
+  \qquad
+  \infer[\verif\use]
+  {\{R\} : P \verif}
+  {R : P \use}
+\]
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\end{document}
