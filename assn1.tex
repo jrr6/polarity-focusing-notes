@@ -1,0 +1,188 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{proof-dashed,amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\input{program-macros}
+\input{logic-macros}
+\input{metatheory}
+
+\title{Assignment 1: Natural Deduction and Sequent Calculus}
+\author{Chris Martens}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Lecture 1 Exercises}
+
+\subsection{Natural Deduction}
+\begin{itemize}
+  \item $(A \imp B) \iand A \imp B$
+  \item $(A \imp (B \ior C)) \imp (A \iand \neg B) \imp C$
+  \item $(A \ior B) \iand C \imp (A \iand C) \ior (B \iand C)$
+\end{itemize}
+
+\begin{exercise}\label{ex:derivs}
+  Typeset derivations for these proofs.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:hypnotation}
+  In class, there was a discussion of the meaning of
+  $\vdash$, the notation for the hypothetical judgment.
+  Recall that we give the hypothetical judgment
+  $B_1 \istrue, \ldots, B_n \istrue \vdash A \istrue$
+  its meaning via ``scoped axioms'' of the form
+  \[
+    \infer[]{B_i \istrue}{}
+  \]
+  in the ambient metalogic, which are permitted to be
+  used when proving $A \istrue$.
+
+  In Gentzen's original notation, he elided the explicit mention of
+  $\Gamma$, instead writing
+  \[
+  \infer[\imp I]
+  {A \imp B \istrue}
+  {\deduce{B \istrue}{[A \istrue]}}
+  \]
+
+  When we write $\Gamma$ explicitly, it is also very tempting
+  to treat it as ``mere'' syntax that can be manipulated by
+  inference rules (e.g. Weakening, Contraction, and Exchange; or an
+  equational theory on contexts).
+
+  These presentational choices impact both metatheory and
+  pedagogy. For this exercise, decide for yourself on an approach that you
+  might try using to present natural deduction to a audience unfamiliar
+  with it: would you include $\Gamma$ explicitly or use Gentzen's (or a
+  similar) notation? How would you write the hypothetical rule?
+  Justify your choices.
+  (If you like the presentation from lecture/these notes, that's fine, 
+  but you still have to argue for it.)
+  
+\end{exercise}
+
+\subsection{Counting Proofs}
+
+There are infinitely many proofs of
+\[
+  \cdot \vdash (A \imp B) \imp (A \iand B) \imp B \istrue
+\]
+
+
+\begin{exercise}
+  Write two distinct proofs of 
+  the above judgment.
+\end{exercise}
+
+\begin{exercise}
+  Informally describe a procedure for generating infinitely many
+  such proofs.
+\end{exercise}
+
+\subsection{Proof Terms}
+
+\begin{exercise}
+  Rewrite the derivations from Exercise \ref{ex:derivs} in proof term notation.
+\end{exercise}
+
+\begin{exercise}
+  Revisit your decision from Exercise \ref{ex:hypnotation}.
+  How do your choices affect the information recorded by the
+  proof term and its relationship to the derivation?
+  If necessary, design a modification to the proof term
+  syntax to account for your decision.
+\end{exercise}
+
+
+\section{Lecture 2 Exercises}
+
+\begin{exercise}
+    Show that the rules for implication are locally sound and complete, and show how they relate to $\beta$-reduction and $\eta$-expansion.
+\end{exercise}
+
+
+\section{Lecture 3 Exercises}
+
+\subsection{Sequent Calculus}
+\begin{itemize}
+  \item $A \ior B \imp A \ior B$
+  \item $(A \imp B) \iand A \imp B$
+  \item $(A \imp (B \ior C)) \imp (A \iand \neg B) \imp C$
+  \item $(A \ior B) \iand C \imp (A \iand C) \ior (B \iand C)$
+\end{itemize}
+
+\begin{exercise}
+  Typeset proofs of $\cdot \proves A$ (in sequent calculus)
+  for each formula $A$ above.
+\end{exercise}
+
+
+\begin{exercise} 
+  State and prove a corresponding theorem for Contraction.
+  If you are unable to make the proof rigorous,
+  discuss why and what might be done to address it.
+\end{exercise}
+
+\subsection{Non-provability}
+
+In sequent calculus, it is easy to demonstrate
+that certain sequents are {\em not} provable.
+We will work through some examples:
+
+\begin{itemize}
+  \item Soundness: no proof of $\cdot \proves \bot$
+  \item Disjunction property: if $\cdot \proves A \ior B$,
+    then $\cdot \proves A$ or $\cdot \proves B$.
+  \item Non-provability of excluded middle (LEM): there is no proof
+    of $\cdot \proves A \ior \lnot A$ for arbitrary $A$.
+  \item Non-provability of double-negation elimination (DNE):
+    there is no proof of $\cdot \proves \lnot \lnot A \implies A$.
+\end{itemize}
+
+\begin{exercise}
+  Typeset proofs of the above non-provability arguments.
+\end{exercise}
+
+\begin{exercise}
+  Find another classically valid, but not intuitionistically valid,
+  proposition $A$ and demonstrate that $\cdot \proves A$ is not provable
+  in general.
+\end{exercise}
+
+\begin{exercise}
+  Why do we keep qualifying each of these statements with ``in general''
+  or ``for arbitrary $A$''? Explain how the situation changes
+  when we are allowed to talk about specific propositions $A$.
+\end{exercise}
+
+
+\begin{exercise}
+  Discuss why the Cut and Identity metatheorem statements correspond to soundness and
+  completeness for sequent calculus.
+\end{exercise}
+
+\section{Lecture 4 Exercises}
+
+
+\begin{exercise}
+  Come up with a proof term assignment for sequent calculus proofs.
+  Re-express the cases of the proof above as translating
+  natural deduction proof terms to sequent calculus proof terms.
+
+  Try ``running'' this translation on a non-normal STLC program,
+  such as $x:A \vdash \pi_1 ((\lambda{y}.y)\;x, ())$.
+  Document any observations or hypotheses you have about the
+  results, and any other experiments you might want to run
+  to test them.
+\end{exercise}
+
+
+
+
+\end{document}
