@@ -1,0 +1,289 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{proof-dashed,amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\input{program-macros}
+\input{logic-macros}
+\input{metatheory}
+
+\title{Lecture 4: Relating Natural Deduction to Sequent Calculus via Cut
+Admissibility}
+\author{Chris Martens}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Lecture outline:
+\begin{itemize}
+    \item Cut Admissibility proof
+    \item Natural Deduction to Sequent Calculus via Cut Elimination
+    \item Verifications and Uses
+\end{itemize}
+
+This lecture sources extensively from Frank Pfenning's 2017 lecture notes
+on Sequent Calculus and Cut Elimination.
+
+\section{Cut Admissibility}
+
+Recall our statement of the Cut theorem.
+
+\begin{theorem}[Cut]
+  If $\Gamma \proves A$ and $\Gamma, A \proves C$ then $\Gamma \proves C$.
+\end{theorem}
+
+\begin{proof}
+  By induction on the lexicographic ordering of $A$ followed
+  by the unordered pair of $\DD$ and $\EE$, where $\DD$ is the derivation
+  of the first assumption and $\EE$ is the derivation of the second.
+
+  The cases for the proof fall into three categories:
+  \begin{itemize}
+    \item The so-called {\em principal cuts}, in which the cut formula 
+      $A$ is the {\em principal formula} for the outermost rule of both 
+      $\DD$ and $\EE$. 
+      The principal formula of a rule is the one it matches against,
+      e.g. $A \iand B$ in $\iand L$ and $\iand R$.
+    \item The cut formula is not the principal formula of the outermost
+      rule comprising $\DD$.
+    \item The cut formula is not the principal formula of the outermost
+      rule comprising $\EE$.
+  \end{itemize}
+
+  In class, we discuss three cases.
+  \begin{itemize}
+    \item Principal cut for $\imp$.
+    \item Side formula cut (1) for $\ior L$.
+    \item Side formula cut (2) for $\iand R$.
+  \end{itemize}
+\end{proof}
+
+\section{From Natural Deduction to Sequent Calculus}
+
+\begin{theorem}[ND to SC]
+  \label{thm:nd-sc}
+  If $\Gamma \vdash A\istrue$ then $\ulcorner \Gamma \urcorner
+\proves A$.
+  ($\ulcorner \Gamma \urcorner$ turns each $A_i\istrue \in \Gamma$
+  into a bare $A_i$).
+\end{theorem}
+
+\begin{proof}
+By induction on the structure of the derivation of $\Gamma \vdash A
+\istrue$.
+
+In class, we cover the $\imp E$ case:
+
+  \[
+  \DD = \infer[\imp E]{\Gamma \vdash B\istrue}
+    {\deduce{\Gamma \vdash A \imp B\istrue}{\DD'} 
+    & \deduce{\Gamma \vdash A\istrue}{\EE}}
+  \]
+
+  Need to show: $\Gamma \proves B$.
+
+  By IH on $\DD'$, we have $\DD^* : \Gamma \proves A \imp B$.
+  By IH on $\EE$, and then weakening,
+  we have $\EE^* : \Gamma, A \imp B \proves A$.
+
+  In sequent calculus, construct the following derivation
+  $\FF$:
+  \[
+    \infer[\imp L]
+    {\Gamma, A \imp B \proves B}
+    {\deduce{\Gamma, A \imp B \proves A}{\EE^*}
+    &
+    \infer[\mathsf{id}_B]
+    {\Gamma, A \imp B, B \proves B}{}}
+  \]
+
+  By cut admissibility on $\DD^*$ and $\FF$,
+  with cut formula $A \imp B$,
+  we have $\Gamma \proves B$ as needed.
+
+  The introduction rules from natural deduction
+  all follow directly via their corresponding right rules
+  in sequent calculus.
+
+  The other elimination rules proceed
+  similarly to the shown case, using cut on the principal
+  formula of the rule to connect its inductively assumed proof 
+  on the right to a derivation we can construct that uses it on the left.
+\end{proof}
+
+\begin{exercise}
+  Come up with a proof term assignment for sequent calculus proofs.
+  Re-express the cases of the proof above as translating
+  natural deduction proof terms to sequent calculus proof terms.
+
+  Try ``running'' this translation on a non-normal STLC program,
+  such as $x:A \vdash \pi_1 ((\lambda{y}.y)\;x, ())$.
+  Document any observations or hypotheses you have about the
+  results, and any other experiments you might want to run
+  to test them.
+\end{exercise}
+
+\subsection{Remarks: Soundness of ND and Normalization for STLC}
+
+Because the sequent calculus allows us to establish its consistency by easy
+inspection (see previous lecture), the preceding development---cut
+admissibility and the translation from natural deduction---combine to give
+us the consistency of natural deduction. To see why, suppose there
+exists a proof of $\cdot \vdash \bot \istrue$. Then by \ref{nd-sc}, there
+must be a cut-free proof of the sequent $\cdot \proves \bot$, but we
+previously ruled this out, so the premise cannot hold.
+
+Because these proofs were both constructive, this also means we have a 
+{\em procedure} for going from a natural deduction proof to some kind of
+normal
+form. However, that normal form is still expressed as a sequent calculus
+derivation. To make the ``round trip'' back to natural deduction,
+we need an intermediate calculus that expresses its normal forms.
+
+\section{Verifications and Uses}
+
+We now introduce a calculus that will serve as a waypoint between
+natural deduction and sequent calculus, known variously as {\em
+verifications and uses} (Pfenning), {\em intercalation} (Gentzen(?)),
+{\em normal natural deduction} (citation needed), and {\em normal}
+or {\em canonical lambda calculus} (TODO cite).
+
+Judgments: $A \verif$ ($A$ has a verification); $A \use$ ($A$ may be used)
+
+\[
+  \infer[\iand I]
+  {A \iand B \verif}
+  {A \verif & B \verif}
+  \qquad
+  \infer[\iand E_1]
+  {A \use}
+  {A \iand B \use}
+  \qquad
+  \infer[\iand E_2]
+  {B \use}
+  {A \iand B \use}
+  \qquad
+  \infer[\top I]
+  {\top \verif}{}
+\]
+
+\[
+  \infer[\ior I_1]
+  {A \ior B \verif}
+  {A \verif}
+  \qquad
+  \infer[\ior I_2]
+  {A \ior B \verif}
+  {B \verif}
+  \qquad
+  \infer[\ior E]
+  {C \verif}
+  {A \ior B \use
+   &
+   A \use \vdash C \verif
+   &
+   B \use \vdash C \verif
+  }
+\]
+
+\[
+  \infer[\bot E]
+  {C \verif}
+  {\bot \use}
+  \qquad
+  \infer[\imp I]
+  {A \imp B \verif}
+  {A \use \vdash B \verif}
+  \qquad
+  \infer[\imp E]
+  {B \use}
+  {A \imp B \use
+   &
+   B \verif}
+  \qquad
+  \infer[\verif\use]
+  {P \verif}
+  {P \use}
+\]
+
+Note that we restrict switching from uses to verifications
+(the $\verif \use$ rule) to atomic propositions $P$.
+
+\subsection{Proof Terms}
+
+At the end of lecture, we introduced a proof term language.
+Because we have two judgments, we have two syntactic
+categories, $R$ for {\em atomic} terms, i.e. proofs of $A\use$, 
+and $M$ for {\em normal} terms, i.e. verifications. We argued (informally)
+that all $M : A \verif$ are in $\beta$-short, $\eta$-long form,
+and thus we cannot represent reducible expressions.
+That is, all verifications are normal by construction.
+
+\[
+  \infer[\iand I]
+  {(M_1, M_2) : A \iand B \verif}
+  {M_1 : A \verif & M_2 : B \verif}
+  \qquad
+  \infer[\iand E_1]
+  {\pi_1 R : A \use}
+  {R : A \iand B \use}
+  \qquad
+  \infer[\iand E_2]
+  {\pi_2 R : B \use}
+  {R : A \iand B \use}
+\]
+
+
+\[
+  \infer[\top I]
+  {() : \top \verif}{}
+  \qquad
+  \infer[\ior I_1]
+  {\exinl M : A \ior B \verif}
+  {M : A \verif}
+  \qquad
+  \infer[\ior I_2]
+  {\exinr M : A \ior B \verif}
+  {M : B \verif}
+\]
+\[
+  \infer[\ior E]
+  {\excase{R, x.M, y.N} : C \verif}
+  {R : A \ior B \use
+   &
+   x:A \use \vdash M:C \verif
+   &
+   y:B \use \vdash N:C \verif
+  }
+  \qquad
+  \infer[\bot E]
+  {\excase{R} : C \verif}
+  {R : \bot \use}
+\]
+\[
+  \infer[\imp I]
+  {\lambda{x}.M : A \imp B \verif}
+  {x:A \use \vdash M:B \verif}
+  \qquad
+  \infer[\imp E]
+  {R\;M : B \use}
+  {R : A \imp B \use
+   &
+   M : B \verif}
+  \qquad
+  \infer[\verif\use]
+  {\{R\} : P \verif}
+  {R : P \use}
+\]
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\end{document}
